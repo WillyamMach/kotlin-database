@@ -11,7 +11,7 @@ class Db {
     fun connection(): Connection? {
         try {
             this.con = DriverManager.getConnection(url, user, password)
-            print("succesfully conected")
+            print("successfully connected")
 
         } catch (e: SQLException) {
             e.printStackTrace()
