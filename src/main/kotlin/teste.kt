@@ -1,8 +1,13 @@
 fun main() {
     val db = Db();
 
-    var username = "Willyam"
-    var password = "123"
+    val user = "will"
+    val pass = "will"
 
-    db.insert(username, password);
+
+//    db.update(user, pass, 1)
+//    db.delete(2)
+    db.delete(4)
+    db.select()
+
 }
