@@ -9,21 +9,16 @@ class Db {
     private val password = ""
     private var con: Connection? = null
 
-    private fun connection(): Connection? {
+    init {
         try {
             this.con = DriverManager.getConnection(url, user, password)
-
         } catch (e: SQLException) {
             e.printStackTrace()
             println("An error has occurred while trying to connect")
         }
-
-        return null
     }
 
     fun insert(username: String, password: String) {
-        this.connection()
-
         val query = "INSERT INTO tb_users (use_login, use_password) VALUES (?, ?)"
         val insert = this.con?.prepareStatement(query)
 
@@ -31,24 +26,24 @@ class Db {
         insert?.setString(2, password)
         insert?.executeUpdate()
 
-        con?.close()
     }
 
-    fun select() {
-        this.connection()
+    fun select(id: Int? = null) {
+        var query = "SELECT * FROM tb_users"
 
-        val query = "SELECT * FROM tb_users"
+        if(id != null) {
+            query += " WHERE use_id = $id"
+        }
+
         val result = this.con?.createStatement()?.executeQuery(query)
+
         while(result?.next() == true) {
             println("${result.getInt("use_id")}, ${result.getString("use_login")}, ${result.getString("use_password")}")
         }
 
-        con?.close()
     }
 
     fun update(username: String, password: String, id: Int) {
-        this.connection()
-
         val query = "UPDATE tb_users SET use_login = ?, use_password = ? WHERE use_id = ?"
         val statement: PreparedStatement? = con?.prepareStatement(query)
 
@@ -57,19 +52,14 @@ class Db {
         statement?.setInt(3, id)
         statement?.executeUpdate()
 
-        con?.close()
     }
 
     fun delete(id: Int) {
-        this.connection()
-
         val query = "DELETE FROM tb_users WHERE use_id = ?"
         val statement = con?.prepareStatement(query)
 
         statement?.setInt(1, id)
         statement?.executeUpdate()
-
-        con?.close()
     }
 }
 
